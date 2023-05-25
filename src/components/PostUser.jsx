@@ -48,7 +48,7 @@ const AddUser = ({ show, handleShow, handleHide, handleUpdate }) => {
       </button>
 
       {show && (
-        <div className='fixed top-0 left-0 right-0 z-20 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full grid place-items-center overlay'>
+        <div className='fixed top-0 left-0 right-0 z-20 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full grid place-items-center overlay'>
           <div className='relative w-full max-w-2xl max-h-full'>
             <div className='relative bg-white rounded-lg shadow dark:bg-gray-700'>
               <div className='flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600'>

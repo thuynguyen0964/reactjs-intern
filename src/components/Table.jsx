@@ -5,15 +5,18 @@ import AddUser from './PostUser';
 import defaultAvatar from '../img/default-avatar.jpg';
 import UpdateUser from './UpdateUser';
 import _ from 'lodash';
+import DeleteUser from './DeleteUser';
 
 const Table = () => {
   const defaultPage = 1;
 
   const [info, setInfo] = useState([]);
+  const [val, setVal] = useState({});
   const [totalPage, setTotalPage] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
-  const [val, setVal] = useState({});
+  const [showDelete, setShowDelete] = useState(false);
+  const [isUser, setIsUser] = useState('');
 
   const handleShow = () => {
     setShowModal(true);
@@ -29,6 +32,14 @@ const Table = () => {
 
   const handleUpdate = (user) => {
     setInfo([user, ...info]);
+  };
+
+  const areYouSure = (user = {}) => {
+    setShowDelete(!showDelete);
+
+    if (user.first_name && user.last_name) {
+      setIsUser(`${user.first_name} ${user.last_name}`);
+    }
   };
 
   const handleEditUser = (users) => {
@@ -136,7 +147,10 @@ const Table = () => {
                       >
                         Edit
                       </button>
-                      <button className='px-4 py-2 bg-red-500 rounded-md text-white'>
+                      <button
+                        onClick={() => areYouSure(user)}
+                        className='px-4 py-2 bg-red-500 rounded-md text-white'
+                      >
                         Remove
                       </button>
                     </div>
@@ -149,6 +163,9 @@ const Table = () => {
       <div className='flex justify-end my-5'>
         <Pagination count={totalPage} clicked={handlePageClick} />
       </div>
+      {showDelete && (
+        <DeleteUser nameWantDelete={isUser} handleShow={() => areYouSure()} />
+      )}
 
       {showUpdate && (
         <UpdateUser
