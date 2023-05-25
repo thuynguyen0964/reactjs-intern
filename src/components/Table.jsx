@@ -4,6 +4,7 @@ import Pagination from './Pagination';
 import AddUser from './PostUser';
 import defaultAvatar from '../img/default-avatar.jpg';
 import UpdateUser from './UpdateUser';
+import _ from 'lodash';
 
 const Table = () => {
   const defaultPage = 1;
@@ -31,7 +32,16 @@ const Table = () => {
   };
 
   const handleEditUser = (users) => {
-    console.log(users);
+    let cloneInfo = _.cloneDeep(info);
+
+    let index = cloneInfo.findIndex((item) => item.id === users.id);
+
+    if (cloneInfo[index].first_name && cloneInfo[index].email) {
+      cloneInfo[index].first_name = users.first_name;
+      cloneInfo[index].email = users.email;
+    }
+    setInfo(cloneInfo);
+    setShowUpdate(false);
   };
 
   const handleEdit = (user) => {

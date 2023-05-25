@@ -1,6 +1,7 @@
 import customAxios from './axiosCustomConfig';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 const UpdateUser = ({ show, setHide, value, edit }) => {
   const [values, setValues] = useState({
@@ -14,7 +15,6 @@ const UpdateUser = ({ show, setHide, value, edit }) => {
 
   const handleUpdateUsers = async () => {
     const reponse = await putUpdate(values);
-    console.log(reponse);
 
     if (reponse) {
       edit({
@@ -23,6 +23,7 @@ const UpdateUser = ({ show, setHide, value, edit }) => {
         id: values.id,
       });
     }
+    toast.success('Update users successfull');
   };
 
   React.useEffect(() => {
