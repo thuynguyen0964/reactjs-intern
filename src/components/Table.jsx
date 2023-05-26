@@ -9,8 +9,11 @@ import DeleteUser from './DeleteUser';
 import {
   ArrowDownCircleIcon,
   ArrowUpCircleIcon,
+  FolderArrowDownIcon,
+  DocumentArrowUpIcon,
 } from '@heroicons/react/24/solid';
 import { toast } from 'react-toastify';
+import { CSVLink } from 'react-csv';
 
 const Table = () => {
   const defaultPage = 1;
@@ -38,6 +41,7 @@ const Table = () => {
     setShowUpdate(false);
   };
 
+  // filter users
   const handleChangeTerm = debounce((e) => {
     let resultsValue = e.target.value;
     setSearchTerm(resultsValue);
@@ -124,24 +128,51 @@ const Table = () => {
     fetchData(defaultPage);
   }, []);
 
+  const csvData = [
+    ['firstname', 'lastname', 'email'],
+    ['Ahmed', 'Tomi', 'ah@smthing.co.com'],
+    ['Raed', 'Labes', 'rl@smthing.co.com'],
+    ['Yezzi', 'Min l3b', 'ymin@cocococo.com'],
+  ];
+
   return (
     <>
       <div className='flex justify-between items-center my-5 max-sm:flex-wrap max-sm:flex-col max-md:items-start max-sm:gap-3'>
-        <div className='flex gap-4 reposn-input'>
+        {/* input  */}
+        <div className='max-sm:w-full'>
           <input
-            defaultValue=''
+            defaultValue={searchTerm}
             onChange={(e) => handleChangeTerm(e)}
             type='text'
             className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
             placeholder='Enter email ....'
           />
         </div>
-        <AddUser
-          show={showModal}
-          handleShow={handleShow}
-          handleHide={handleHide}
-          handleUpdate={handleUpdate}
-        />
+
+        <div className='flex items-center gap-3 max-md:flex-wrap max-sm:w-full'>
+          {/* import */}
+          <label
+            htmlFor='file'
+            className='import max-sm:m-0 max-sm:bg-emerald-400 max-sm:w-full hover:opacity-70 cursor-pointer'
+          >
+            <DocumentArrowUpIcon className='h-6 w-6 text-white' />
+            <span>Import</span>
+          </label>
+          <input type='file' id='file' hidden />
+
+          {/* export btn */}
+          <span className='flex gap-1 items-center max-sm:m-0 max-sm:bg-emerald-400 text-white bg-green-600 hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 dark:bg-blue-600 max-sm:w-full  dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+            <FolderArrowDownIcon className='h-6 w-6 text-white' />
+            <CSVLink data={csvData}>Export Data</CSVLink>
+          </span>
+          {/* Add btn */}
+          <AddUser
+            show={showModal}
+            handleShow={handleShow}
+            handleHide={handleHide}
+            handleUpdate={handleUpdate}
+          />
+        </div>
       </div>
 
       <div className='relative w-full max-w-screen-xl mx-auto overflow-x-auto shadow-sm sm:rounded-md mt-5'>

@@ -3,6 +3,7 @@ import customAxios from './axiosCustomConfig';
 import { toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.min.css';
 import PropTypes from 'prop-types';
+import { PlusCircleIcon } from '@heroicons/react/24/solid';
 
 const AddUser = ({ show, handleShow, handleHide, handleUpdate }) => {
   const [name, setName] = useState('');
@@ -40,11 +41,12 @@ const AddUser = ({ show, handleShow, handleHide, handleUpdate }) => {
   return (
     <>
       <button
-        className='block ml-auto max-sm:m-0 max-sm:bg-emerald-400 max-sm:w-full text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+        className='flex gap-1 items-center max-sm:m-0 max-sm:bg-emerald-400 max-sm:w-full text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
         type='button'
         onClick={handleShow}
       >
-        Add News
+        <PlusCircleIcon className='h-6 w-6 text-white' />
+        <span>Add News</span>
       </button>
 
       {show && (

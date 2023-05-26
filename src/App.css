@@ -11,6 +11,18 @@ body {
 .overlay {
   background-color: rgba(0, 0, 0, 0.5);
 }
+/*  */
+.import {
+  text-align: center;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: white;
+  background: #8e817c;
+  font-size: medium;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
 
 @media screen and (max-width: 767px) {
   .custom {
