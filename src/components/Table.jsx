@@ -28,6 +28,7 @@ const Table = () => {
   const [sortBy, setSortBy] = useState('asc');
   const [sortField, setSortField] = useState('id');
   const [searchTerm, setSearchTerm] = useState('');
+  const [dataCsv, setDataCsv] = useState([]);
 
   const handleShow = () => {
     setShowModal(true);
@@ -128,12 +129,22 @@ const Table = () => {
     fetchData(defaultPage);
   }, []);
 
-  const csvData = [
-    ['firstname', 'lastname', 'email'],
-    ['Ahmed', 'Tomi', 'ah@smthing.co.com'],
-    ['Raed', 'Labes', 'rl@smthing.co.com'],
-    ['Yezzi', 'Min l3b', 'ymin@cocococo.com'],
-  ];
+  const getUserFromApi = (event, done) => {
+    let results = [];
+    if (info && info.length > 0) {
+      results.push(['ID', 'Email', 'First Name', 'Avatar']);
+      info.map((item) => {
+        let arr = [];
+        arr[0] = item.id;
+        arr[1] = item.email;
+        arr[2] = item.first_name;
+        arr[3] = item.avatar;
+        results.push(arr);
+      });
+      setDataCsv(results);
+      done();
+    }
+  };
 
   return (
     <>
@@ -163,8 +174,15 @@ const Table = () => {
           {/* export btn */}
           <span className='flex gap-1 items-center max-sm:m-0 max-sm:bg-emerald-400 text-white bg-green-600 hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 dark:bg-blue-600 max-sm:w-full  dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             <FolderArrowDownIcon className='h-6 w-6 text-white' />
-            <CSVLink data={csvData}>Export Data</CSVLink>
+            <CSVLink
+              data={dataCsv}
+              asyncOnClick={true}
+              onClick={getUserFromApi}
+            >
+              Export Data
+            </CSVLink>
           </span>
+
           {/* Add btn */}
           <AddUser
             show={showModal}
