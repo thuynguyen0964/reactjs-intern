@@ -4,6 +4,7 @@ body {
 }
 .App {
   width: 1280px;
+  min-height: 100vh;
   max-width: calc(100% - 32px);
   margin: 0 auto;
 }
@@ -21,5 +22,10 @@ body {
     left: 0;
     right: 0;
     z-index: 3;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  }
+  .reposn-input {
+    flex-wrap: wrap;
   }
 }

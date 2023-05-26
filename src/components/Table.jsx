@@ -4,12 +4,13 @@ import Pagination from './Pagination';
 import AddUser from './PostUser';
 import defaultAvatar from '../img/default-avatar.jpg';
 import UpdateUser from './UpdateUser';
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import DeleteUser from './DeleteUser';
 import {
   ArrowDownCircleIcon,
   ArrowUpCircleIcon,
 } from '@heroicons/react/24/solid';
+import { toast } from 'react-toastify';
 
 const Table = () => {
   const defaultPage = 1;
@@ -23,6 +24,7 @@ const Table = () => {
   const [isUser, setIsUser] = useState({});
   const [sortBy, setSortBy] = useState('asc');
   const [sortField, setSortField] = useState('id');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleShow = () => {
     setShowModal(true);
@@ -35,6 +37,23 @@ const Table = () => {
   const setHide = () => {
     setShowUpdate(false);
   };
+
+  const handleChangeTerm = debounce((e) => {
+    let resultsValue = e.target.value;
+    setSearchTerm(resultsValue);
+    let cloneValue = [...info];
+    if (resultsValue) {
+      cloneValue = cloneValue.filter((item) => {
+        return item.email.includes(resultsValue);
+      });
+      setInfo(cloneValue);
+      cloneValue.length === 0
+        ? toast.info('No user was found')
+        : toast.success(`${cloneValue.length} user was found`);
+    } else {
+      fetchData(defaultPage);
+    }
+  }, 1000);
 
   const handleUpdate = (user) => {
     setInfo([...info, user]);
@@ -107,14 +126,26 @@ const Table = () => {
 
   return (
     <>
-      <AddUser
-        show={showModal}
-        handleShow={handleShow}
-        handleHide={handleHide}
-        handleUpdate={handleUpdate}
-      />
+      <div className='flex justify-between items-center my-5 max-sm:flex-wrap max-sm:flex-col max-md:items-start max-sm:gap-3'>
+        <div className='flex gap-4 reposn-input'>
+          <input
+            defaultValue=''
+            onChange={(e) => handleChangeTerm(e)}
+            type='text'
+            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
+            placeholder='Enter email ....'
+          />
+        </div>
+        <AddUser
+          show={showModal}
+          handleShow={handleShow}
+          handleHide={handleHide}
+          handleUpdate={handleUpdate}
+        />
+      </div>
+
       <div className='relative w-full max-w-screen-xl mx-auto overflow-x-auto shadow-sm sm:rounded-md mt-5'>
-        <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+        <table className='w-full border-x-2 border-y-2 border-gray-100 text-sm text-left text-gray-500 dark:text-gray-400'>
           <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
             <tr>
               <th className='px-6 py-3'>Email</th>

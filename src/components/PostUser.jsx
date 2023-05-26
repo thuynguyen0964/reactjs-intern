@@ -38,9 +38,9 @@ const AddUser = ({ show, handleShow, handleHide, handleUpdate }) => {
   };
 
   return (
-    <div className='modal w-full h-full'>
+    <>
       <button
-        className='block ml-auto text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+        className='block ml-auto max-sm:m-0 max-sm:bg-emerald-400 max-sm:w-full text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
         type='button'
         onClick={handleShow}
       >
@@ -48,7 +48,7 @@ const AddUser = ({ show, handleShow, handleHide, handleUpdate }) => {
       </button>
 
       {show && (
-        <div className='fixed top-0 left-0 right-0 z-20 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full grid place-items-center overlay'>
+        <div className='fixed top-0 left-0 right-0 z-20 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-md:inset-0 max-h-full grid place-items-center overlay'>
           <div className='relative w-full max-w-2xl max-h-full'>
             <div className='relative bg-white rounded-lg shadow dark:bg-gray-700'>
               <div className='flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600'>
@@ -136,7 +136,7 @@ const AddUser = ({ show, handleShow, handleHide, handleUpdate }) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
