@@ -6,6 +6,10 @@ import defaultAvatar from '../img/default-avatar.jpg';
 import UpdateUser from './UpdateUser';
 import _ from 'lodash';
 import DeleteUser from './DeleteUser';
+import {
+  ArrowDownCircleIcon,
+  ArrowUpCircleIcon,
+} from '@heroicons/react/24/solid';
 
 const Table = () => {
   const defaultPage = 1;
@@ -17,6 +21,8 @@ const Table = () => {
   const [showUpdate, setShowUpdate] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [isUser, setIsUser] = useState({});
+  const [sortBy, setSortBy] = useState('asc');
+  const [sortField, setSortField] = useState('id');
 
   const handleShow = () => {
     setShowModal(true);
@@ -40,6 +46,15 @@ const Table = () => {
     if (user.first_name && user.last_name) {
       setIsUser(user);
     }
+  };
+
+  const handleSort = (typeSort, typeField) => {
+    setSortBy(typeSort);
+    setSortField(typeField);
+
+    let cloneInfo = [...info];
+    cloneInfo = _.orderBy(cloneInfo, [typeField], [typeSort]);
+    setInfo(cloneInfo);
   };
 
   const handleEditUser = (users) => {
@@ -102,21 +117,35 @@ const Table = () => {
         <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
           <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
             <tr>
-              <th scope='col' className='px-6 py-3'>
-                Email
+              <th className='px-6 py-3'>Email</th>
+              <th className='px-6 py-3'>Avatar</th>
+              <th className='px-6 py-3'>
+                <div className='flex-1 flex gap-1 items-center'>
+                  <span>FullName</span>
+                  <div className='flex items-center gap-1'>
+                    <button onClick={() => handleSort('desc', 'first_name')}>
+                      <ArrowDownCircleIcon className='h-5 w-5 text-gray-500' />
+                    </button>
+                    <button onClick={() => handleSort('asc', 'first_name')}>
+                      <ArrowUpCircleIcon className='h-5 w-5 text-gray-500' />
+                    </button>
+                  </div>
+                </div>
               </th>
-              <th scope='col' className='px-6 py-3'>
-                Avatar
+              <th className='px-6 py-3'>
+                <div className='flex-1 flex gap-1 items-center'>
+                  <span>User ID</span>
+                  <div className='flex items-center gap-1'>
+                    <button onClick={() => handleSort('desc', 'id')}>
+                      <ArrowDownCircleIcon className='h-5 w-5 text-gray-500' />
+                    </button>
+                    <button onClick={() => handleSort('asc', 'id')}>
+                      <ArrowUpCircleIcon className='h-5 w-5 text-gray-500' />
+                    </button>
+                  </div>
+                </div>
               </th>
-              <th scope='col' className='px-6 py-3'>
-                FullName
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Users ID
-              </th>
-              <th scope='col' className='px-6 py-3'>
-                Action
-              </th>
+              <th className='px-6 py-3'>Action</th>
             </tr>
           </thead>
           <tbody>

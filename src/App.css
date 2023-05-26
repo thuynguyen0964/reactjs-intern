@@ -1,7 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 body {
   font-family: 'Poppins', sans-serif;
-  min-height: 100vh;
+}
+.App {
+  width: 1280px;
+  max-width: calc(100% - 32px);
+  margin: 0 auto;
 }
 .overlay {
   background-color: rgba(0, 0, 0, 0.5);

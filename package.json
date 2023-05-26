@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "axios": "^1.4.0",
     "flowbite": "^1.6.5",
     "lodash": "^4.17.21",

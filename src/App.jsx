@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
-    <section className='App max-w-screen-xl mx-auto'>
+    <section className='App'>
       <Header />
       <Table />
       <ToastContainer
