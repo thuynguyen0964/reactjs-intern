@@ -16,7 +16,7 @@ const Table = () => {
   const [showModal, setShowModal] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [isUser, setIsUser] = useState('');
+  const [isUser, setIsUser] = useState({});
 
   const handleShow = () => {
     setShowModal(true);
@@ -31,14 +31,14 @@ const Table = () => {
   };
 
   const handleUpdate = (user) => {
-    setInfo([user, ...info]);
+    setInfo([...info, user]);
   };
 
   const areYouSure = (user = {}) => {
     setShowDelete(!showDelete);
 
     if (user.first_name && user.last_name) {
-      setIsUser(`${user.first_name} ${user.last_name}`);
+      setIsUser(user);
     }
   };
 
@@ -55,10 +55,16 @@ const Table = () => {
     setShowUpdate(false);
   };
 
+  const handleDeleteUser = (user) => {
+    let cloneUsers = _.cloneDeep(info);
+    cloneUsers = cloneUsers.filter((item) => item.id !== user.id);
+    setInfo(cloneUsers);
+  };
+
   const handleEdit = (user) => {
     setShowUpdate(true);
     setVal({
-      fullname: `${user.first_name} ${user.last_name}`,
+      fullname: user.first_name,
       email: user.email,
       id: user.id,
     });
@@ -134,9 +140,9 @@ const Table = () => {
                     />
                   </td>
                   <td className='px-6 py-4'>
-                    {user.last_name
+                    {user?.last_name
                       ? `${user?.first_name} ${user?.last_name}`
-                      : user.first_name}
+                      : `${user.first_name}`}
                   </td>
                   <td className='px-6 py-4'>{user?.id}</td>
                   <td className='px-6 py-4'>
@@ -164,7 +170,11 @@ const Table = () => {
         <Pagination count={totalPage} clicked={handlePageClick} />
       </div>
       {showDelete && (
-        <DeleteUser nameWantDelete={isUser} handleShow={() => areYouSure()} />
+        <DeleteUser
+          nameWantDelete={isUser}
+          handleShow={() => areYouSure()}
+          handeDelete={handleDeleteUser}
+        />
       )}
 
       {showUpdate && (

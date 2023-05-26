@@ -6,11 +6,16 @@ const customAxios = axios.create({
 
 customAxios.interceptors.response.use(
   function (response) {
-    return response.data;
+    return response.data ? response?.data : { statusCode: response?.status };
   },
   function (error) {
     return Promise.reject(error);
   }
 );
 
+const removeUser = (id) => {
+  return customAxios.delete(`/api/users/${id}`);
+};
+
 export default customAxios;
+export { removeUser };

@@ -1,7 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { removeUser } from './axiosCustomConfig';
+import { toast } from 'react-toastify';
 
-const DeleteUser = ({ handleShow, handleConfirm, nameWantDelete }) => {
+const DeleteUser = ({ handleShow, nameWantDelete, handeDelete }) => {
+  const confirmDelete = async () => {
+    let response = await removeUser(nameWantDelete.id);
+    if (response && +response.statusCode === 204) {
+      toast.success('Delete users succeed');
+      handleShow();
+      handeDelete(nameWantDelete);
+    } else {
+      toast.error('Delete user faild , permision denifed');
+    }
+  };
   return (
     <>
       <div className='fixed grid place-items-center top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full overlay'>
@@ -43,12 +55,13 @@ const DeleteUser = ({ handleShow, handleConfirm, nameWantDelete }) => {
               </svg>
               <h3 className='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
                 Are you sure you want to delete user <br />{' '}
-                <strong>{nameWantDelete}</strong>?
+                <strong>{`${nameWantDelete.first_name} ${nameWantDelete.last_name}`}</strong>
+                ?
               </h3>
               <button
                 type='button'
                 className='text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2'
-                onClick={handleConfirm}
+                onClick={confirmDelete}
               >
                 Yes, Im accept
               </button>
@@ -70,6 +83,7 @@ const DeleteUser = ({ handleShow, handleConfirm, nameWantDelete }) => {
 DeleteUser.propTypes = {
   handleShow: PropTypes.func,
   handleConfirm: PropTypes.func,
-  nameWantDelete: PropTypes.string,
+  nameWantDelete: PropTypes.object,
+  handeDelete: PropTypes.func,
 };
 export default DeleteUser;
