@@ -1,13 +1,13 @@
 import './App.css';
 import Header from './components/Header';
-import Table from './components/Table';
 import { ToastContainer } from 'react-toastify';
+import Home from './components/Home';
 
 function App() {
   return (
     <section className='App'>
       <Header />
-      <Table />
+      <Home />
       <ToastContainer
         position='top-right'
         autoClose={1500}
