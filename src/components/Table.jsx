@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { toast } from 'react-toastify';
 import { CSVLink } from 'react-csv';
+import Papa from 'papaparse';
 
 const Table = () => {
   const defaultPage = 1;
@@ -129,16 +130,17 @@ const Table = () => {
     fetchData(defaultPage);
   }, []);
 
-  const getUserFromApi = (event, done) => {
+  const getUserFromFile = (event, done) => {
     let results = [];
     if (info && info.length > 0) {
-      results.push(['ID', 'Email', 'First Name', 'Avatar']);
+      results.push(['id', 'email', 'first_name', 'last_name', 'avatar']);
       info.map((item) => {
         let arr = [];
         arr[0] = item.id;
         arr[1] = item.email;
         arr[2] = item.first_name;
-        arr[3] = item.avatar;
+        arr[3] = item.last_name;
+        arr[4] = item.avatar;
         results.push(arr);
       });
       setDataCsv(results);
@@ -146,6 +148,54 @@ const Table = () => {
     }
   };
 
+  // import data from csv file
+  const importData = (e) => {
+    if (e.target && e.target.files && e.target.files[0]) {
+      let file = e.target.files[0];
+
+      if (file.type !== 'application/vnd.ms-excel') {
+        toast.warn('You uploaded not a file .csv');
+        return;
+      }
+
+      Papa.parse(file, {
+        // header: true,
+        complete: function (results) {
+          toast.success('File upload succeed');
+
+          let rawCSV = results.data;
+          if (rawCSV[0] && rawCSV[0].length === 5) {
+            if (
+              rawCSV[0][0] !== 'id' ||
+              rawCSV[0][1] !== 'email' ||
+              rawCSV[0][2] !== 'first_name' ||
+              rawCSV[0][3] !== 'last_name' ||
+              rawCSV[0][4] !== 'avatar'
+            ) {
+              toast.warn('File csv Header is invalid format');
+            } else {
+              let arr = [];
+              rawCSV.map((item, index) => {
+                let obj = {};
+                if (index > 0 && item.length === 5) {
+                  obj.id = item[0];
+                  obj.email = item[1];
+                  obj.first_name = item[2];
+                  obj.last_name = item[3];
+                  obj.avatar = item[4];
+                  arr.push(obj);
+                }
+              });
+
+              setInfo(arr);
+            }
+          } else {
+            toast.warn('File csv is invalid format');
+          }
+        },
+      });
+    }
+  };
   return (
     <>
       <div className='flex justify-between items-center my-5 max-sm:flex-wrap max-sm:flex-col max-md:items-start max-sm:gap-3'>
@@ -169,7 +219,7 @@ const Table = () => {
             <DocumentArrowUpIcon className='h-6 w-6 text-white' />
             <span>Import</span>
           </label>
-          <input type='file' id='file' hidden />
+          <input type='file' id='file' onChange={importData} hidden />
 
           {/* export btn */}
           <span className='flex gap-1 items-center max-sm:m-0 max-sm:bg-emerald-400 text-white bg-green-600 hover:opacity-70 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 dark:bg-blue-600 max-sm:w-full  dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
@@ -177,7 +227,7 @@ const Table = () => {
             <CSVLink
               data={dataCsv}
               asyncOnClick={true}
-              onClick={getUserFromApi}
+              onClick={getUserFromFile}
             >
               Export Data
             </CSVLink>
