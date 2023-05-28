@@ -41,3 +41,6 @@ body {
     flex-wrap: wrap;
   }
 }
+.active {
+  color: #6d6dde !important;
+}
