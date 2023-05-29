@@ -17,7 +17,6 @@ function App() {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover
         theme='light'
       />
     </section>

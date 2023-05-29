@@ -1,7 +1,15 @@
 import 'flowbite';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Navbar() {
+  const navigate = useNavigate();
+  const logOutUser = () => {
+    localStorage.removeItem('token');
+    navigate('/signup');
+    toast.success('Logout succeed');
+  };
+
   return (
     <>
       <nav className='bg-white border-gray-200 dark:bg-gray-900'>
@@ -90,19 +98,20 @@ function Navbar() {
                   >
                     <li>
                       <NavLink
-                        to='signup'
-                        className='block px-4 py-2 font-medium dark:hover:bg-gray-600 dark:hover:text-white'
-                      >
-                        Sign Up
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
                         to='signin'
-                        className='block px-4 py-2 font-medium dark:hover:bg-gray-600 dark:hover:text-white'
+                        className='block px-4 w-full py-2 font-medium dark:hover:bg-gray-600 dark:hover:text-white hover:bg-gray-100'
                       >
                         Sign In
                       </NavLink>
+                    </li>
+                    <li>
+                      <button
+                        type='button'
+                        className='block w-full text-left px-4 py-2 font-medium dark:hover:bg-gray-600 dark:hover:text-white hover:bg-gray-100'
+                        onClick={logOutUser}
+                      >
+                        Logout
+                      </button>
                     </li>
                   </ul>
                 </div>

@@ -1,17 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { loginUser } from '../components/axiosCustomConfig';
+import 'react-toastify/ReactToastify.min.css';
+import { toast } from 'react-toastify';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
   const [hidePass, setHidePass] = useState(true);
   const [mailVal, setMailVal] = useState('');
   const [pass, setPass] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleHidePass = () => {
     setHidePass(!hidePass);
   };
 
-  const handleChange = (e, fn) => {
-    fn(e.target.value);
+  const handleChange = (e, state) => {
+    state(e.target.value);
+  };
+
+  useEffect(() => {
+    let userToken = localStorage.getItem('token');
+    if (userToken) {
+      navigate('/');
+    }
+  }, []);
+
+  const handleLogin = async () => {
+    if (mailVal === '' || pass === '') {
+      toast.warn('One of field is missing value');
+      return;
+    }
+    setIsLoading(true);
+    let response = await loginUser(mailVal, pass);
+    if (response && response.token) {
+      localStorage.setItem('token', response.token);
+      toast.success('Login succeed');
+      navigate('/');
+    } else if (response && response.status === 400) {
+      // error handle
+      toast.error(response.data.error);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -27,7 +58,7 @@ const SignUp = () => {
                 htmlFor='email'
                 className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
               >
-                Your email
+                Your email (eve.holt@reqres.in)
               </label>
               <input
                 type='email'
@@ -95,18 +126,19 @@ const SignUp = () => {
             <button
               type='button'
               className='text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:opacity-50 disabled:pointer-events-none'
-              disabled={pass.length === 0}
+              disabled={!pass || !mailVal || isLoading}
+              onClick={handleLogin}
             >
-              Sign In
+              {isLoading ? 'Loading ...' : 'Sign In'}
             </button>
             <p className='text-sm font-light text-gray-500 dark:text-gray-400'>
               Don’t have an account yet?{' '}
-              <a
-                href='#'
-                className='font-medium text-primary-600 hover:underline dark:text-primary-500'
+              <NavLink
+                to='/signup'
+                className='font-medium text-primary-600 dark:text-primary-500'
               >
                 Sign up
-              </a>
+              </NavLink>
             </p>
           </form>
         </div>
